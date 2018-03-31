@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Input";
+    src: url(../css/fonts/input.ttf), url(../css/fonts/input-bold.ttf), url(../css/fonts/input-italic.ttf), url(../css/fonts/input-bold-italic.ttf);
+}
+
 body {
   padding-right:0px !important;
   background-color:#222;

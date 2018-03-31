@@ -8,25 +8,6 @@ $('#confirmation').on('hidden.bs.modal', function () {
     isErrorShownAlready = false;
 })
 
-function randQuote() {
-    var qPara = document.getElementById("quote");
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", "../res/parsedquotes", false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                alert(allText);
-            }
-        }
-    }
-    rawFile.send(null);
-
-}
-
 function getDatabase() {
     
     var button = document.getElementById("getDB");
@@ -118,6 +99,7 @@ function mouseOver(link) {
     link.getElementsByTagName("span")[0].className = "fas fa-times-circle fa-lg";
 }
 
+// precondition: username has NO spaces
 function deleteUser(delButton) {
     var username = delButton.innerHTML.split(" ")[1];
     delButton.disabled = true;
@@ -129,6 +111,10 @@ function deleteUser(delButton) {
     try {
         // i got a response.
         xmlHttp.onreadystatechange = function() {
+            try {
+                var spinner = delButton.getElementsByTagName("span")[0];
+                spinner.parentNode.removeChild(spinner);
+            } catch (err) {}
             // response is bad, if error not shown, show error
             if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
                 if (!isErrorShownAlready) {
@@ -146,7 +132,7 @@ function deleteUser(delButton) {
             document.getElementById("cancel-delete").disabled = false;
             document.getElementById("x-delete").disabled = false;
         }
-        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?username=" + username, true);
+        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?userasfname=" + username, true);
         xmlHttp.send();
     } catch (err) {
         alert(err); 
