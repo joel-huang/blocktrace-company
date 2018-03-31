@@ -132,7 +132,7 @@ function deleteUser(delButton) {
             document.getElementById("cancel-delete").disabled = false;
             document.getElementById("x-delete").disabled = false;
         }
-        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?userasfname=" + username, true);
+        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?username=" + username, true);
         xmlHttp.send();
     } catch (err) {
         alert(err); 
