@@ -1,15 +1,48 @@
+if (localStorage.getItem("loggedInUser") === null) {
+        window.location.href = "index.html";
+}
+
+$(document).ready(function() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            console.log(xmlHttp.responseText);
+            if (xmlHttp.responseText === "false") {
+                window.location.href = "index.html";
+            }
+        }
+    }
+    xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/is_staff_logged_in?u=" + localStorage.getItem("loggedInUser"), true);
+    xmlHttp.send();
+
+
+    document.getElementById("active-user").innerHTML = localStorage.getItem("loggedInUser");
+
+    $('#confirmation').on('hidden.bs.modal', function () {
+        document.getElementById("sorry").style.visibility = "hidden";
+        document.getElementById("delete").disabled = false;
+        isErrorShownAlready = false;
+    });
+
+    $('#sidebar-logout').click(function () {
+        console.log("logout called");
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "index.html";
+            }
+        }
+        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/staff_logout?u=" + localStorage.getItem("loggedInUser"), true);
+        xmlHttp.send();
+    });
+});
+
 var currentJSON;
 var confirmMessage;
 var isErrorShownAlready = false;
 
-$('#confirmation').on('hidden.bs.modal', function () {
-    document.getElementById("sorry").style.visibility = "hidden";
-    document.getElementById("delete").disabled = false;
-    isErrorShownAlready = false;
-})
-
 function getDatabase() {
-    
     var button = document.getElementById("getDB");
     button.disabled = true;
     button.innerHTML = '<span class="fas fa-sync fa-spin"></span> ' + button.innerHTML;
@@ -59,7 +92,7 @@ function getDatabase() {
                         name_col.innerHTML = name;
                         dob_col.innerHTML = dob;
                         postcode_col.innerHTML = postcode;
-                        del_col.innerHTML = '<a class="times" href="#confirmation" id="trash'+ i +'"onmouseout="mouseLeave(this)" onmouseover="mouseOver(this)" onclick="confirmDelete(this)" data-toggle="modal"><span class="fas fa-times fa-lg"></span></a>';
+                        del_col.innerHTML = '<a class="times" href="#confirmation" id="trash'+ i +'"onmouseout="mouseLeaveDeleteButton(this)" onmouseover="mouseOverDeleteButton(this)" onclick="confirmDelete(this)" data-toggle="modal"><span class="fas fa-times fa-lg"></span></a>';
 
                         row.appendChild(nric_col);
                         row.appendChild(name_col);
@@ -91,14 +124,6 @@ function confirmDelete(link) {
     document.getElementById("delete").innerHTML = "Delete " + username;
 }
 
-function mouseLeave(link) {
-    link.getElementsByTagName("span")[0].className = "fas fa-times fa-lg";
-}
-
-function mouseOver(link) {
-    link.getElementsByTagName("span")[0].className = "fas fa-times-circle fa-lg";
-}
-
 // precondition: username has NO spaces
 function deleteUser(delButton) {
     var username = delButton.innerHTML.split(" ")[1];
@@ -108,33 +133,34 @@ function deleteUser(delButton) {
     delButton.innerHTML = '<span class="fas fa-sync fa-spin"></span> ' + delButton.innerHTML;
     setTimeout(function() {
     var xmlHttp = new XMLHttpRequest();
-    try {
-        // i got a response.
-        xmlHttp.onreadystatechange = function() {
-            try {
-                var spinner = delButton.getElementsByTagName("span")[0];
-                spinner.parentNode.removeChild(spinner);
-            } catch (err) {}
-            // response is bad, if error not shown, show error
-            if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
-                if (!isErrorShownAlready) {
-                    document.getElementById("sorry").style.visibility = "visible";
-                    isErrorShownAlready = true;
+        try {
+            // i got a response.
+            xmlHttp.onreadystatechange = function() {
+                try {
+                    var spinner = delButton.getElementsByTagName("span")[0];
+                    spinner.parentNode.removeChild(spinner);
+                } catch (err) {}
+                // response is bad, if error not shown, show error
+                if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+                    if (!isErrorShownAlready) {
+                        document.getElementById("sorry").style.visibility = "visible";
+                        isErrorShownAlready = true;
+                    }
+                    delButton.disabled = false;
                 }
-                delButton.disabled = false;
+                // response is good
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    isErrorShownAlready = false;
+                    $('#confirmation').modal('hide');
+                    getDatabase();
+                } 
+                document.getElementById("cancel-delete").disabled = false;
+                document.getElementById("x-delete").disabled = false;
             }
-            // response is good
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                isErrorShownAlready = false;
-                $('#confirmation').modal('hide');
-                getDatabase();
-            } 
-            document.getElementById("cancel-delete").disabled = false;
-            document.getElementById("x-delete").disabled = false;
+            xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?username=" + username, true);
+            xmlHttp.send();
+        } catch (err) {
+            alert(err); 
         }
-        xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/company_del_user?username=" + username, true);
-        xmlHttp.send();
-    } catch (err) {
-        alert(err); 
-    }    }, 1000);
+    }, 1000);
 }

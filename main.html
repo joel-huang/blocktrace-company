@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Blocktrace">
+
+    <title>Blocktrace</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <link href="img/b.png" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="perfect-scrollbar/perfect-scrollbar.css">
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/rest.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        <i>Blocktrace</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" id="sidebar-logout">Logout</a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <div id="dashboard-header">
+            <a href="#menu-toggle" class="btn btn-primary" id="menu-toggle" onmouseover="mouseOverSidebarCog(this)" onmouseout="mouseLeaveSidebarCog(this)"><span style="text-align: center;" class="fas fa-cog"></span></a>
+            <div id="dashboard-header-label">Dashboard</div>
+            <img id="blocktrace-logo" src="img/blocktrace.png">
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+
+                <div id="confirmation" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="true" tabindex='-1'>
+                      <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                            <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button id="x-delete" type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Delete User</h4>
+                                    </div>
+                                    <div id="modal-body" class="modal-body">
+                                        <p id ="confirmation-message"></p>
+                                        <p id ="sorry" style="visibility:hidden;color:#c70c0c;font-size:11px;">Something went wrong. Please try again.</p>
+                                    </div>
+                                    <div id="modal-footer" class="modal-footer">
+                                        <button id="delete" type="button" class="btn btn-primary" onclick="deleteUser(this)"></button>
+                                        <button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                            </div>
+
+                      </div>
+                </div>
+
+                <h1><span class="fa fa-building"></span> TestCompany, Inc.</h1>
+                <ul class="fa-ul">
+                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>You are logged in as <span id="active-user" style="font-style: italic; color:#c70c0c;"></span></li>
+                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>It is your responsibility to protect user data.</li>
+                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>Do not leave your computer unattended and log out when you are finished.</li>
+                </ul>
+                <br>
+                <a id="getDB" class="btn btn-primary" onclick="getDatabase()">Refresh Database</a>
+                <div class="table100 ver2 m-b-110" style="margin-top: 20px;">
+                    <div class="table100-head">
+                        <table>
+                            <thead>
+                                <tr class="row100-head">
+                                    <th class="cell100 column1">NRIC</th>
+                                    <th class="cell100 column2">Name</th>
+                                    <th class="cell100 column3">D.O.B.</th>
+                                    <th class="cell100 column4">Postcode</th>
+                                    <th class="cell100 column5"><span class="fa fa-times-circle" /></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="table100-body js-pscroll">
+                        <table>
+                            <tbody id="tablecontent">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+        <!-- Bootstrap core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+    <script src="perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script>
+        $('.js-pscroll').each(function(){
+            var ps = new PerfectScrollbar(this);
+
+            $(window).on('resize', function(){
+                ps.update();
+            })
+        });
+    </script>
+    <script src="js/jquery.json2html.js"></script>
+    <script src="js/json2html.js"></script>
+    <script src="js/anim.js"></script>   
+
+</body>
+
+</html>

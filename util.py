@@ -43,3 +43,28 @@ def del_all():
     cur.execute("DELETE FROM COMPANY_DATABASE")
     conn.commit()
     return "Deleted everything"
+
+#select database
+def select_db(column,database):
+    conn,cur = connect_db()
+    cur.execute("SELECT %s FROM %s"%(column,database))
+    rows = cur.fetchall()
+    return conn,cur,rows
+
+def add_company_staff(user, pw):
+    conn,cur,rows = select_db("*","COMPANY_LOGIN")
+    print(rows)
+    cur.execute("INSERT INTO COMPANY_LOGIN (USERNAME,PASSWORD,LOGGED_IN) \
+                        VALUES (%s,%s,%s)",(user,pw,"false"));
+    conn.commit()
+    
+
+    # response.headers['Access-Control-Allow-Origin'] = '*'
+    # print(response)
+
+def print_company_staff():
+    conn,cur,rows = select_db("*","COMPANY_LOGIN")
+    return rows
+
+x= print_company_staff()
+print(x)

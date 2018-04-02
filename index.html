@@ -18,98 +18,97 @@
     <link href="img/b.png" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="perfect-scrollbar/perfect-scrollbar.css">
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/login.js"></script>
 </head>
 
 <body>
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                        <i>Blocktrace</i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">Dashboard</a>
-                </li>
-                <li>
-                    <a href="#">Logout</a>
-                </li>
 
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-
-        <div id="dashboard-header">
-            <a href="#menu-toggle" class="btn btn-primary" id="menu-toggle"><span class="fas fa-cog fa-spin"></span></a>
-            <div id="dashboard-header-label">Dashboard</div>
-            <img id="blocktrace-logo" src="img/blocktrace.png">
-        </div>
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-
-                <div id="confirmation" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="true" tabindex='-1'>
-                      <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                            <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button id="x-delete" type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Delete User</h4>
-                                    </div>
-                                    <div id="modal-body" class="modal-body">
-                                        <p id ="confirmation-message"></p>
-                                        <p id ="sorry" style="visibility:hidden;color:#c70c0c;font-size:11px;">Something went wrong. Please try again.</p>
-                                    </div>
-                                    <div id="modal-footer" class="modal-footer">
-                                        <button id="delete" type="button" class="btn btn-primary" onclick="deleteUser(this)"></button>
-                                        <button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+    <!-- BEGIN # MODAL LOGIN -->
+    <div class="modal fade" id="login-modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" align="center">
+                        <img class="img-circle" id="img_logo" src="img/b.png">
+                    </div>
+                    
+                    <!-- Begin # DIV Form -->
+                    <div id="div-forms">
+                    
+                        <!-- Begin # Login Form -->
+                        <form id="login-form">
+                            <div class="modal-body">
+                                <div id="div-login-msg" style="text-align: center;">
+                                    Blocktrace: TestCompany, Inc.
+                                </div>
+                                <input id="login_username" class="form-control" type="text" placeholder="Username" required>
+                                <input id="login_password" class="form-control" type="password" placeholder="Password" required>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox">Remember me
+                                    </label>
+                                </div>
                             </div>
-
-                      </div>
-                </div>
-
-                <h1><span class="fa fa-building"></span> TestCompany, Inc.</h1>
-                <ul class="fa-ul">
-                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>You are logged in as <font style="font-style: italic; color:#c70c0c;">testcompany.user0</font></li>
-                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>It is your responsibility to protect user data.</li>
-                    <li><span class="fa-li"><i class="fas fa-chevron-right"></i></span>Do not leave your computer unattended and log out when you are finished.</li>
-                </ul>
-                <br>
-                <button id="getDB" class="btn btn-primary" onclick="getDatabase()">Refresh Database</button>
-
-                <div class="table100 ver2 m-b-110" style="margin-top: 20px;">
-                    <div class="table100-head">
-                        <table>
-                            <thead>
-                                <tr class="row100-head">
-                                    <th class="cell100 column1">NRIC</th>
-                                    <th class="cell100 column2">Name</th>
-                                    <th class="cell100 column3">D.O.B.</th>
-                                    <th class="cell100 column4">Postcode</th>
-                                    <th class="cell100 column5"><span class="fa fa-times-circle" /></th>
-                                </tr>
-                            </thead>
-                        </table>
+                            <div class="modal-footer">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                                </div>
+                                <div style="display:inline;">
+                                    <button id="login_lost_btn" type="button" class="btn btn-link" style="float:left;">Lost Password?</button>
+                                    <button id="login_register_btn" type="button" class="btn btn-link">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End # Login Form -->
+                        
+                        <!-- Begin | Lost Password Form -->
+                        <form id="lost-form" style="display:none;">
+                            <div class="modal-body">
+                                <div id="div-lost-msg" style="text-align: center;">
+                                    <span id="text-lost-msg">Type your e-mail.</span>
+                                </div>
+                                <input id="lost_email" class="form-control" type="text" placeholder="E-Mail" required>
+                            </div>
+                            <div class="modal-footer">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Send me an e-mail</button>
+                                </div>
+                                <div style="display:inline;">
+                                    <button id="lost_login_btn" type="button" class="btn btn-link" style="float:left;">Log In</button>
+                                    <button id="lost_register_btn" type="button" class="btn btn-link">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End | Lost Password Form -->
+                        
+                        <!-- Begin | Register Form -->
+                        <form id="register-form" style="display:none;">
+                            <div class="modal-body">
+                                <div id="div-register-msg" style="text-align: center;">
+                                    <span id="text-register-msg">Register an account.</span>
+                                </div>
+                                <input id="register_username" class="form-control" type="text" placeholder="Username" required>
+                                <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
+                                <input id="register_password" class="form-control" type="password" placeholder="Password" required>
+                            </div>
+                            <div class="modal-footer">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+                                </div>
+                                <div style="display:inline;">
+                                    <button id="register_login_btn" type="button" class="btn btn-link" style="float:left;">Log In</button>
+                                    <button id="register_lost_btn" type="button" class="btn btn-link">Lost Password?</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End | Register Form -->
+                        
                     </div>
-
-                    <div class="table100-body js-pscroll">
-                        <table>
-                            <tbody id="tablecontent">
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- End # DIV Form -->
+                    
                 </div>
             </div>
         </div>
-        <!-- /#page-content-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
+        <!-- END # MODAL LOGIN -->
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/bootstrap/js/bootstrap.js"></script>
@@ -124,6 +123,9 @@
 
     <script src="perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script>
+        $(window).on('load',function(){
+            $('#login-modal').modal('show');
+        });
         $('.js-pscroll').each(function(){
             var ps = new PerfectScrollbar(this);
 
@@ -132,11 +134,6 @@
             })
         });
     </script>
-    <script src="js/jquery.json2html.js"></script>
-    <script src="js/json2html.js"></script>
-    <script src="js/rest.js"></script>
-    
-
 </body>
 
 </html>
