@@ -40,16 +40,22 @@ $(function() {
                     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                         if (xmlHttp.responseText !== "Wrong credentials or no such staff in the database.") {
                             msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", "Login OK");
-                            localStorage.setItem("loggedInUser",$lg_username);
-                            window.location.href = "main.html";
+                            setTimeout(function() {
+                                localStorage.setItem("loggedInUser",$lg_username);
+                                window.location.href = "main.html";    
+                            }, 1000);
+                            
                         } else {
                             msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Login error");
-                        }
-                        return false;
+                        }   
+                    } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+                        msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Login error");
                     }
                 }
                 xmlHttp.open("POST", "https://shielded-bayou-99151.herokuapp.com/staff_login?u=" + $lg_username + "&p=" + $lg_password, true);
                 xmlHttp.send();
+                return false;
+                break;
             case "lost-form":
                 var $ls_email=$('#lost_email').val();
                 if ($ls_email == "ERROR") {
