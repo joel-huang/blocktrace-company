@@ -49,6 +49,9 @@ $(function() {
                             msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Login error");
                         }   
                     } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+                        setTimeout(function() {
+                            console.log("unsuccessful");
+                        }, 1000);
                         msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Login error");
                     }
                 }
