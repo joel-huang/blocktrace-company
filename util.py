@@ -58,9 +58,13 @@ def add_company_staff(user, pw):
                         VALUES (%s,%s,%s)",(user,pw,"false"));
     conn.commit()
     
-
-    # response.headers['Access-Control-Allow-Origin'] = '*'
-    # print(response)
+def check_auth(username, password):
+    conn,cur,rows = select_db("*","COMPANY_LOGIN")
+    for row in rows:
+        print(row)
+        if (username == row[0] and password == row[1] and row[2] == 'true'):
+            return True
+    return False
 
 def print_company_staff():
     conn,cur,rows = select_db("*","COMPANY_LOGIN")
@@ -68,3 +72,4 @@ def print_company_staff():
 
 x= print_company_staff()
 print(x)
+print(check_auth("user1", "blocktrace"))

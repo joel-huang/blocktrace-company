@@ -42,6 +42,7 @@ $(function() {
                             msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", "Login OK");
                             setTimeout(function() {
                                 localStorage.setItem("loggedInUser",$lg_username);
+                                localStorage.setItem("loggedInPW", $lg_password);
                                 window.location.href = "main.html";    
                             }, 1000);
                             

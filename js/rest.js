@@ -102,11 +102,18 @@ function getDatabase() {
 
                         document.getElementById("tablecontent").appendChild(row);
                     }
-                document.getElementById("getDB").disabled = false;
+
+                    button.removeChild(button.getElementsByTagName("span")[0]);
+                    document.getElementById("getDB").disabled = false;
+
+            } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
                 button.removeChild(button.getElementsByTagName("span")[0]);
+                document.getElementById("getDB").disabled = false;                
             }
         }
+        var authorizationBasic = btoa(localStorage.getItem("loggedInUser") + ':' + localStorage.getItem("loggedInPW"));
         xmlHttp.open("GET", "https://shielded-bayou-99151.herokuapp.com/get_company_database", true);
+        xmlHttp.setRequestHeader('Authorization', 'Basic ' + authorizationBasic);
         xmlHttp.send();
     } catch (err) {
         alert(err); 
