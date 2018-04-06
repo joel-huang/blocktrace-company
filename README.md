@@ -1,4 +1,6 @@
 # blocktrace-company
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
 Web application and back-end code for companies to use to interface with the Hyperledger blockchain. This package allows any organization to view their users' personal information, sourced from the encrypted public ledger. Front- and back-end sources are included in `frontend` and submodule`CompanyBackendServer` respectively.
 
 # Introduction
