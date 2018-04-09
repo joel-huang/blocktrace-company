@@ -51,64 +51,30 @@ function getDatabase() {
     newTbody.id = "hold";
     oldTbody.parentNode.replaceChild(newTbody, oldTbody);
     document.getElementById("hold").id = "tablecontent";
-
     try {
         var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status === 200) {
+            var data = xmlHttp.responseText;
+            var parsed = JSON.parse(data);
+            currentJSON = parsed;
 
-        xmlHttp.onreadystatechange = function() { 
+            for (var i = 0; i < parsed.length; i++) {
 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                var username = parsed[i][0];
+                var password = parsed[i][1];
+                var nric = parsed[i][2].encrypted_id;
+                var name = parsed[i][2].name;
+                var dob = parsed[i][2].birthdate;
+                var postcode = parsed[i][2].postcode;
+                createTableRow(i, nric, name, dob, postcode);
+            }
+            button.removeChild(button.getElementsByTagName("span")[0]);
+            document.getElementById("getDB").disabled = false;
 
-
-                    var data = xmlHttp.responseText;
-                    var parsed = JSON.parse(data);
-                    currentJSON = parsed;
-
-                    for (var i = 0; i < parsed.length; i++) {
-
-                        var username = parsed[i][0];
-                        var password = parsed[i][1];
-                        var nric = parsed[i][2].encrypted_id;
-                        var name = parsed[i][2].name;
-                        var dob = parsed[i][2].birthdate;
-                        var postcode = parsed[i][2].postcode;
-
-                        var row = document.createElement("TR");
-                        var nric_col = document.createElement("TD");
-                        var name_col = document.createElement("TD");
-                        var dob_col = document.createElement("TD");
-                        var postcode_col = document.createElement("TD");
-                        var del_col = document.createElement("TD")
-                        
-                        nric_col.setAttribute("class", "cell100 column1");
-                        name_col.setAttribute("class", "cell100 column2");
-                        dob_col.setAttribute("class", "cell100 column3");
-                        postcode_col.setAttribute("class", "cell100 column4");
-                        del_col.setAttribute("class", "cell100 column5")
-
-                        row.setAttribute("class", "row100 body");
-
-                        nric_col.innerHTML = nric;
-                        name_col.innerHTML = name;
-                        dob_col.innerHTML = dob;
-                        postcode_col.innerHTML = postcode;
-                        del_col.innerHTML = '<a class="times" href="#confirmation" id="trash'+ i +'"onmouseout="mouseLeaveDeleteButton(this)" onmouseover="mouseOverDeleteButton(this)" onclick="confirmDelete(this)" data-toggle="modal"><span class="fas fa-times fa-lg"></span></a>';
-
-                        row.appendChild(nric_col);
-                        row.appendChild(name_col);
-                        row.appendChild(dob_col);
-                        row.appendChild(postcode_col);
-                        row.appendChild(del_col);
-
-                        document.getElementById("tablecontent").appendChild(row);
-                    }
-
-                    button.removeChild(button.getElementsByTagName("span")[0]);
-                    document.getElementById("getDB").disabled = false;
-
-            } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+            } else if (xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status !== 200) {
                 button.removeChild(button.getElementsByTagName("span")[0]);
-                document.getElementById("getDB").disabled = false;                
+                document.getElementById("getDB").disabled = false;
             }
         }
         var authorizationBasic = btoa(localStorage.getItem("loggedInUser") + ':' + localStorage.getItem("loggedInPW"));
@@ -118,6 +84,32 @@ function getDatabase() {
     } catch (err) {
         alert(err); 
     }
+}
+
+function createTableRow(i, nric, name, dob, postcode) {
+    var row = document.createElement("TR");
+    var nric_col = document.createElement("TD");
+    var name_col = document.createElement("TD");
+    var dob_col = document.createElement("TD");
+    var postcode_col = document.createElement("TD");
+    var del_col = document.createElement("TD")
+    nric_col.setAttribute("class", "cell100 column1");
+    name_col.setAttribute("class", "cell100 column2");
+    dob_col.setAttribute("class", "cell100 column3");
+    postcode_col.setAttribute("class", "cell100 column4");
+    del_col.setAttribute("class", "cell100 column5")
+    row.setAttribute("class", "row100 body");
+    nric_col.innerHTML = nric;
+    name_col.innerHTML = name;
+    dob_col.innerHTML = dob;
+    postcode_col.innerHTML = postcode;
+    del_col.innerHTML = '<a class="times" href="#confirmation" id="trash'+ i +'"onmouseout="mouseLeaveDeleteButton(this)" onmouseover="mouseOverDeleteButton(this)" onclick="confirmDelete(this)" data-toggle="modal"><span class="fas fa-times fa-lg"></span></a>';
+    row.appendChild(nric_col);
+    row.appendChild(name_col);
+    row.appendChild(dob_col);
+    row.appendChild(postcode_col);
+    row.appendChild(del_col);
+    document.getElementById("tablecontent").appendChild(row);
 }
 
 function confirmDelete(link) {
@@ -148,7 +140,7 @@ function deleteUser(delButton) {
                     spinner.parentNode.removeChild(spinner);
                 } catch (err) {}
                 // response is bad, if error not shown, show error
-                if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+                if (xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status !== 200) {
                     if (!isErrorShownAlready) {
                         document.getElementById("sorry").style.visibility = "visible";
                         isErrorShownAlready = true;
@@ -156,7 +148,7 @@ function deleteUser(delButton) {
                     delButton.disabled = false;
                 }
                 // response is good
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                if (xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status === 200) {
                     isErrorShownAlready = false;
                     $('#confirmation').modal('hide');
                     getDatabase();
